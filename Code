@@ -18,7 +18,7 @@ class Board{
     //returns the number of the assinged ship that was 'hit'
     public int updateBoard(int x, int y, int m){
         int shipNo = 0;
-        if(cordinates[x-1][y-1]  != '0'){
+        if(cordinates[x-1][y-1] == 3 ||cordinates[x-1][y-1] == 4 || cordinates[x-1][y-1] == 5){
             shipNo = cordinates[x - 1][y -1];
             cordinates[x -1][y -1] = m;
             return shipNo;
@@ -190,7 +190,12 @@ class Game{
               if(playerOne.sinks > playerTwo.sinks)
                   System.out.println("Player one won!");
               else
-                  System.out.println("Player two won!");     
+                  System.out.println("Player two won!");
+                  
+              System.out.println();
+              
+              b.printBoard();
+
     }   
 }
 
