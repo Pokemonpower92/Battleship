@@ -191,8 +191,6 @@ class Game{
                   System.out.println("Player one won!");
               else
                   System.out.println("Player two won!");     
-              
-              b.printBoard();
     }   
 }
 
