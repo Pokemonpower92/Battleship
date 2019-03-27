@@ -1,0 +1,206 @@
+import java.util.Scanner;
+
+//This is a simple Battleship simulator.
+
+class Board{
+    private int[][] cordinates = new int[7][7];
+    /*****************************/    
+    //initialize the board
+    public void initBoard(){
+        for(int i = 0 ; i != 7; i++){
+            for(int j = 0; j !=7; j++)
+                cordinates[i][j] = 0;
+        }
+    }
+    
+    /*****************************/    
+    //change the state of a peg
+    //returns the number of the assinged ship that was 'hit'
+    public int updateBoard(int x, int y, int m){
+        int shipNo = 0;
+        if(cordinates[x-1][y-1]  != '0'){
+            shipNo = cordinates[x - 1][y -1];
+            cordinates[x -1][y -1] = m;
+            return shipNo;
+        }
+        else
+            return shipNo;
+    }
+    
+    /*****************************/    
+    //print the board.
+    public void printBoard(){
+        for(int i = 6; i != -1; i--){
+            for(int j = 0; j !=7; j++)
+                System.out.print(cordinates[j][i] + " ");
+            System.out.println();
+        }
+    }
+    
+    /*****************************/
+    //place ships on the board.
+    //takes an array of ships
+    public void setShips(Ship[] s, int j){
+        for(int i = 0; i != j; i++){
+            int x = s[i].xIndex;
+            int y = s[i].yIndex;
+            boolean valid = true;
+            
+            //check to see if the space is open for the ship.
+            //if not, move on to the next ship.
+            if(cordinates[x][y] == 0){
+                if(s[i].oreintation == 'y'){
+                    for(int t = 0; t != s[i].size; t++){
+                        if(cordinates[x][y + t] != 0)
+                              valid = false;     
+                        else
+                            cordinates[x][y + t] = i+3;
+                    }
+                }
+                
+                else{
+                    if(s[i].oreintation == 'x'){
+                        for(int t = 0; t != s[i].size; t++){
+                            if(cordinates[x + t][y] != 0)
+                                valid = false;
+                            else
+                               cordinates[x + t][y] = i+3;
+                     }
+                    }                       
+                }   
+            }
+            
+        }
+    }
+     /*****************************/
+    //Checks if n (the integer representation of a ship)
+    //exists on the board. If it does, the ship is not sunk.
+    public boolean checkSink(int n){
+        boolean flag = true;
+            for( int i = 0; i != 7; i++){
+                for(int j = 0; j != 7; j++){
+                    if(cordinates[i][j] == n)
+                        flag = false;
+                }
+            }
+            return flag;
+    }
+    
+}
+
+    /*****************************/
+class Ship{
+    int size, xIndex, yIndex, hits;
+    
+    //Refers the the axis the ship exists on
+    char oreintation;
+    public Ship(int s, int x, int y, char c){
+        size = s;
+        xIndex = x;
+        yIndex = y;
+        oreintation = c;
+        hits = 0;
+    }
+}
+    /*****************************/
+class Player{
+    int num;
+    int sinks;
+    
+    public Player(int n){ num = n; sinks = 0;}
+}
+    /*****************************/
+class Game{
+    
+    Player playerOne = new Player(1);
+    Player playerTwo = new Player(2);
+    Board b = new Board();
+    Ship[] s = new Ship[3];
+    
+    //Main logic for the game. 
+    //Intend to add random generation of ships in the future. 
+    public void playGame(){
+        Scanner scn = new Scanner(System.in);
+        int xCor, yCor;
+        //Player one's turn is 'false'
+        boolean turn = false;
+        s[0] = new Ship(2, 0, 0, 'y');
+        s[1] = new Ship(3, 3, 3, 'x');
+        s[2] = new Ship(1, 5, 5, 'y');
+       
+        b.setShips(s, 3);
+
+        
+        while(playerOne.sinks + playerTwo.sinks != 3){
+          if(turn == false){
+              
+              System.out.print("Player one please enter the x cordinate: ");
+              xCor = scn.nextInt();
+              System.out.println();
+              
+              System.out.print("And the y cordinate: ");
+              yCor = scn.nextInt();
+              System.out.println();
+              
+              int move = b.updateBoard(xCor, yCor, 1);
+              
+              if(move != 0){
+                  System.out.println("It's a hit! Calculating...");
+                  if(b.checkSink(move) == true){
+                      System.out.println("Ship " + move + " is sunk!");
+                      playerOne.sinks++;
+                  }
+                  else
+                      System.out.println("Ship " + move + " is still afloat!");
+              }
+              else
+                  System.out.println("It's a miss!");
+              turn = true;
+          }
+          else{
+              
+              System.out.print("Player two please enter the x cordinate: ");
+              xCor = scn.nextInt();
+              System.out.println();
+              
+              System.out.print("And the y cordinate: ");
+              yCor = scn.nextInt();
+              System.out.println();
+              
+              int move = b.updateBoard(xCor, yCor, 1);
+              if(move != 0){
+                  System.out.println("It's a hit! Calculating...");
+                  if(b.checkSink(move) == true){
+                      System.out.println("Ship " + move + " is sunk!");
+                      playerTwo.sinks++;
+                  }
+                  else
+                      System.out.println("Ship " + move + " is still afloat!");
+              }
+              else
+                  System.out.println("It's a miss!");
+              turn = false;          
+          }
+        }
+          System.out.println("That's the last one!");
+          
+              System.out.println("Player one sunk " + playerOne.sinks + " ships");
+              System.out.println("Player two sunk " + playerTwo.sinks + " ships");
+              
+              if(playerOne.sinks > playerTwo.sinks)
+                  System.out.println("Player one won!");
+              else
+                  System.out.println("Player two won!");     
+              
+              b.printBoard();
+    }   
+}
+
+public class Battleship {
+    
+    public static void main(String[] args){
+        Game game = new Game();
+        game.playGame();
+    }
+    
+}
