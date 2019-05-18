@@ -6,8 +6,10 @@ class Board{
     private int[][] cordinates = new int[7][7];
     /*****************************/    
     //initialize the board
-    public void initBoard(){
-        for(int i = 0 ; i != 7; i++){
+    public void initBoard()
+    {
+        for(int i = 0 ; i != 7; i++)
+        {
             for(int j = 0; j !=7; j++)
                 cordinates[i][j] = 0;
         }
@@ -16,9 +18,11 @@ class Board{
     /*****************************/    
     //change the state of a peg
     //returns the number of the assinged ship that was 'hit'
-    public int updateBoard(int x, int y, int m){
+    public int updateBoard(int x, int y, int m)
+    {
         int shipNo = 0;
-        if(cordinates[x-1][y-1] == 3 ||cordinates[x-1][y-1] == 4 || cordinates[x-1][y-1] == 5){
+        if(cordinates[x-1][y-1] == 3 ||cordinates[x-1][y-1] == 4 || cordinates[x-1][y-1] == 5)
+        {
             shipNo = cordinates[x - 1][y -1];
             cordinates[x -1][y -1] = m;
             return shipNo;
@@ -29,8 +33,10 @@ class Board{
     
     /*****************************/    
     //print the board.
-    public void printBoard(){
-        for(int i = 6; i != -1; i--){
+    public void printBoard()
+    {
+        for(int i = 6; i != -1; i--)
+        {
             for(int j = 0; j !=7; j++)
                 System.out.print(cordinates[j][i] + " ");
             System.out.println();
@@ -40,16 +46,20 @@ class Board{
     /*****************************/
     //place ships on the board.
     //takes an array of ships
-    public void setShips(Ship[] s, int j){
-        for(int i = 0; i != j; i++){
+    public void setShips(Ship[] s, int j)
+    {
+        for(int i = 0; i != j; i++)
+        {
             int x = s[i].xIndex;
             int y = s[i].yIndex;
             boolean valid = true;
             
             //check to see if the space is open for the ship.
             //if not, move on to the next ship.
-            if(cordinates[x][y] == 0){
-                if(s[i].oreintation == 'y'){
+            if(cordinates[x][y] == 0)
+            {
+                if(s[i].oreintation == 'y')
+                {
                     for(int t = 0; t != s[i].size; t++){
                         if(cordinates[x][y + t] != 0)
                               valid = false;     
@@ -57,15 +67,17 @@ class Board{
                             cordinates[x][y + t] = i+3;
                     }
                 }
-                
-                else{
-                    if(s[i].oreintation == 'x'){
-                        for(int t = 0; t != s[i].size; t++){
+                else
+                {
+                    if(s[i].oreintation == 'x')
+                    {
+                        for(int t = 0; t != s[i].size; t++)
+                        {
                             if(cordinates[x + t][y] != 0)
                                 valid = false;
                             else
                                cordinates[x + t][y] = i+3;
-                     }
+                        }
                     }                       
                 }   
             }
@@ -89,12 +101,14 @@ class Board{
 }
 
     /*****************************/
-class Ship{
+class Ship
+{
     int size, xIndex, yIndex, hits;
     
     //Refers the the axis the ship exists on
     char oreintation;
-    public Ship(int s, int x, int y, char c){
+    public Ship(int s, int x, int y, char c)
+    {
         size = s;
         xIndex = x;
         yIndex = y;
@@ -103,14 +117,16 @@ class Ship{
     }
 }
     /*****************************/
-class Player{
+class Player
+{
     int num;
     int sinks;
     
     public Player(int n){ num = n; sinks = 0;}
 }
     /*****************************/
-class Game{
+class Game
+{
     
     Player playerOne = new Player(1);
     Player playerTwo = new Player(2);
@@ -119,7 +135,8 @@ class Game{
     
     //Main logic for the game. 
     //Intend to add random generation of ships in the future. 
-    public void playGame(){
+    public void playGame()
+    {
         Scanner scn = new Scanner(System.in);
         int xCor, yCor;
         //Player one's turn is 'false'
@@ -131,8 +148,10 @@ class Game{
         b.setShips(s, 3);
 
         
-        while(playerOne.sinks + playerTwo.sinks != 3){
-          if(turn == false){
+        while(playerOne.sinks + playerTwo.sinks != 3)
+        {
+          if(turn == false)
+          {
               
               System.out.print("Player one please enter the x cordinate: ");
               xCor = scn.nextInt();
@@ -144,9 +163,11 @@ class Game{
               
               int move = b.updateBoard(xCor, yCor, 1);
               
-              if(move != 0){
+              if(move != 0)
+              {
                   System.out.println("It's a hit! Calculating...");
-                  if(b.checkSink(move) == true){
+                  if(b.checkSink(move) == true)
+                  {
                       System.out.println("Ship " + move + " is sunk!");
                       playerOne.sinks++;
                   }
@@ -157,7 +178,8 @@ class Game{
                   System.out.println("It's a miss!");
               turn = true;
           }
-          else{
+          else
+          {
               
               System.out.print("Player two please enter the x cordinate: ");
               xCor = scn.nextInt();
@@ -168,9 +190,11 @@ class Game{
               System.out.println();
               
               int move = b.updateBoard(xCor, yCor, 1);
-              if(move != 0){
+              if(move != 0)
+              {
                   System.out.println("It's a hit! Calculating...");
-                  if(b.checkSink(move) == true){
+                  if(b.checkSink(move) == true)
+                  {
                       System.out.println("Ship " + move + " is sunk!");
                       playerTwo.sinks++;
                   }
@@ -199,9 +223,11 @@ class Game{
     }   
 }
 
-public class Battleship {
+public class Battleship
+{
     
-    public static void main(String[] args){
+    public static void main(String[] args)
+    {
         Game game = new Game();
         game.playGame();
     }
