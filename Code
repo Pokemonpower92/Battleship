@@ -2,7 +2,8 @@ import java.util.Scanner;
 
 //This is a simple Battleship simulator.
 
-class Board{
+class Board
+{
     private int[][] cordinates = new int[7][7];
     /*****************************/    
     //initialize the board
